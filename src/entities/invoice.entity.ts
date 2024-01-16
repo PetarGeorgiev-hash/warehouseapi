@@ -1,10 +1,12 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Transfer } from './transfer.entity';
 
@@ -23,9 +25,9 @@ export class Invoice {
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @CreateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @CreateDateColumn({ name: 'deleted_at', default: null })
+  @DeleteDateColumn({ name: 'deleted_at', default: null })
   deletedAt: Date;
 }

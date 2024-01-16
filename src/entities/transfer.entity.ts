@@ -1,10 +1,12 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Client } from './client.entity';
 
@@ -34,9 +36,9 @@ export class Transfer {
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @CreateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @CreateDateColumn({ name: 'deleted_at', default: null })
+  @DeleteDateColumn({ name: 'deleted_at', default: null })
   deletedAt: Date;
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from 'src/entities/client.entity';
 import { Repository } from 'typeorm';
@@ -29,14 +29,18 @@ export class ClientsService {
     return client;
   }
 
-  async updateClient(clientObj: Partial<Client>) {
-    const updatedClient = await this.clientRepo.save(clientObj);
-    return updatedClient;
+  async updateClient(id: string, clientObj: Partial<Client>) {
+    const client = await this.getClient(id);
+    Object.assign(client, clientObj);
+    return await this.clientRepo.save(client);
   }
 
   async deleteClient(id: string) {
     const client = await this.getClient(id);
-    client.deletedAt = new Date();
-    return client;
+    if (!client) {
+      throw new NotFoundException('User not found or its been already deleted');
+    }
+
+    return this.clientRepo.softDelete(id);
   }
 }

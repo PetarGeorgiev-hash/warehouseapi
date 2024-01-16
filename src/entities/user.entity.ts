@@ -1,8 +1,11 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
 } from 'typeorm';
 
 enum UserRole {
@@ -10,7 +13,7 @@ enum UserRole {
   operator = 'operator',
   viewer = 'viewer',
 }
-
+@Unique(['email'])
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -32,9 +35,9 @@ export class User {
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @CreateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @CreateDateColumn({ name: 'deleted_at', default: null })
+  @DeleteDateColumn({ name: 'deleted_at', default: null })
   deletedAt: Date;
 }

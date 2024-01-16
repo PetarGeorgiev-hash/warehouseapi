@@ -4,15 +4,19 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ClientsService } from './clients.service';
-import { CreateClientDto } from './dtos/create-client.dto';
+import { CreateClientDto } from './dtos/create-clinet.dto';
 import { UpdateClientDto } from './dtos/update-client.dto';
+import { AuthGurad } from 'guards/auth.guard';
+import { Roles } from 'src/decorators/role.decorator';
+import { RolesGuard } from 'guards/roles.guard';
 
-//add delete to the clients
-
+@UseGuards(AuthGurad, RolesGuard)
 @Controller('clients')
 export class ClientsController {
   constructor(private clientService: ClientsService) {}
@@ -23,15 +27,22 @@ export class ClientsController {
   }
 
   @Post()
+  @Roles('operator')
   createClient(@Body() client: CreateClientDto) {
     return this.clientService.createClient(client);
   }
-  @Patch('')
-  updateUser(@Body() client: UpdateClientDto) {
-    return this.clientService.updateClient(client);
+  @Patch('/:id')
+  @Roles('operator')
+  updateUser(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() client: UpdateClientDto,
+  ) {
+    return this.clientService.updateClient(id, client);
   }
-  @Delete('')
-  deleteClient(@Param('id') id: string) {
+  @Delete('/:id')
+  @Roles('owner')
+  deleteClient(@Param('id', new ParseUUIDPipe()) id: string) {
+    console.log(id);
     return this.clientService.deleteClient(id);
   }
 }
